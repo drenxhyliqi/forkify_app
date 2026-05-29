@@ -32,10 +32,15 @@ const renderSpinner = function (parentEl) {
 // 1. To make an AJAX request to an API we use fetch
 const showRecipe = async function () {
   try {
+
+    const id = window.location.hash.slice(1);
+    console.log(id);
+    if (!id) return;
+    
     // Loading Recipe
     renderSpinner(recipeContainer)
-
-    const res = await fetch('https://forkify-api.jonas.io/api/v2/recipes/5ed6604591c37cdc054bc886?key=42c9e48e-ee20-485a-9c6b-282fe7e6e88c')
+    // const res = await fetch(`https://forkify-api.jonas.io/api/v2/recipes/5ed6604591c37cdc054bc886?key=42c9e48e-ee20-485a-9c6b-282fe7e6e88c/${id}`);
+    const res = await fetch(`https://forkify-api.jonas.io/api/v2/recipes/664c8f193e7aa067e94e866f?key=42c9e48e-ee20-485a-9c6b-282fe7e6e88c/${id}`);
     const data = await res.json();
   
     if (!res.ok) throw new Error(`${data.message} (${res.status})`)
@@ -106,7 +111,7 @@ const showRecipe = async function () {
           <h2 class="heading--2">Recipe ingredients</h2>
           <ul class="recipe__ingredient-list">
           ${recipe.ingredients.map(ing => {
-            return `
+      return `
               <li class="recipe__ingredient">
                 <svg class="recipe__icon">
                   <use href="${icons}#icon-check"></use>
@@ -118,7 +123,7 @@ const showRecipe = async function () {
                 </div>
               </li>
               `
-          }).join('')}
+    }).join('')}
           </ul>
         </div>
 
@@ -145,6 +150,8 @@ const showRecipe = async function () {
   } catch (err) {
     alert(err)
   }
-}
+};
 
-showRecipe()
+showRecipe();
+
+['haschange','load'].forEach(ev => window.addEventListener(ev, showRecipe))
