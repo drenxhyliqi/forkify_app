@@ -8,10 +8,6 @@ class ResultsView extends View {
   _icons = icons;
 
   _generateMarkup() {
-    return this._data.map(this._generateMarkupPreview).join('');
-  }
-
-  _generateMarkupPreview(result) {
     return this._data.map(generatePreviewMarkup).join('');
   }
 }
