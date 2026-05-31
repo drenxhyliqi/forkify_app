@@ -1,6 +1,26 @@
 import icons from 'url:../../img/icons.svg';
 import View from './View.js';
 
+const formatQuantity = function (quantity) {
+  if (!quantity) return '';
+  if (Number.isInteger(quantity)) return quantity;
+
+  const tolerance = 1.0e-6;
+  let numerator = 1;
+  let denominator = 1;
+
+  while (Math.abs(numerator / denominator - quantity) > tolerance) {
+    if (numerator / denominator < quantity) {
+      numerator++;
+    } else {
+      denominator++;
+      numerator = Math.round(quantity * denominator);
+    }
+  }
+
+  return `${numerator}/${denominator}`;
+};
+
 class RecipeView extends View {
   _parentElement = document.querySelector('.recipe');
   _errorMessage = 'We could not find that recipe. Please try another one!';
@@ -118,7 +138,7 @@ class RecipeView extends View {
         <svg class="recipe__icon">
           <use href="${icons}#icon-check"></use>
         </svg>
-        <div class="recipe__quantity">${ing.quantity ?? ''}</div>
+        <div class="recipe__quantity">${formatQuantity(ing.quantity)}</div>
         <div class="recipe__description">
           <span class="recipe__unit">${ing.unit}</span>
           ${ing.description}

@@ -17,6 +17,14 @@ const controlRecipes = async function () {
     await model.loadRecipe(id);
 
     recipeView.render(model.state.recipe);
+
+    if (model.state.search.results.length > 0) {
+      resultsView.render(model.getSearchResultsPage());
+    }
+
+    if (model.state.bookmarks.length > 0) {
+      bookmarksView.render(model.state.bookmarks);
+    }
   } catch (err) {
     recipeView.renderError();
   }
@@ -24,10 +32,10 @@ const controlRecipes = async function () {
 
 const controlSearchResults = async function () {
   try {
-    resultsView.renderSpinner();
-
     const query = searchView.getQuery();
     if (!query) return;
+
+    resultsView.renderSpinner();
 
     await model.loadSearchResults(query);
 
